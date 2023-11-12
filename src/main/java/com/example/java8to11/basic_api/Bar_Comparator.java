@@ -15,5 +15,7 @@ public class Bar_Comparator {
 
         Comparator<String> compareToIgnoreCase = String::compareToIgnoreCase;
         name.sort(compareToIgnoreCase.reversed().thenComparingInt(String::length));
+
+        //WebMvcConfigurer가 abstract class대신 default 메소드를 활용해 부분적으로 상속받을 수 있게 함
     }
 }
