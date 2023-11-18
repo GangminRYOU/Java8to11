@@ -19,6 +19,7 @@ public class App {
         asyncTwo();
         getAppleStockPriceAndMSStockPrice();
         allOf();
+        anyOf();
     }
 
     public static void asyncTwo() throws ExecutionException, InterruptedException {
@@ -95,6 +96,24 @@ public class App {
         //이렇게 하면 아무것도 blocking이 되지 않는다.
         Integer price = averageStockPrice.get();
         log.info("average stock price={}", price);
+    }
 
+    /**
+     * @Note : 아무거나 하나 결과 받기
+     */
+    public static void anyOf() throws ExecutionException, InterruptedException {
+        CompletableFuture<Integer> applePrice = CompletableFuture.supplyAsync(() -> {
+            log.info("Waiting for Apple Stock Price at:{}", System.currentTimeMillis());
+            return new Random().nextInt(300);
+        });
+        CompletableFuture<Integer> msPrice = CompletableFuture.supplyAsync(() -> {
+            log.info("Waiting for MS Stock Price at:{}", System.currentTimeMillis());
+            return new Random().nextInt(300);
+        });
+
+        //TODO
+        CompletableFuture<Void> future = CompletableFuture.anyOf(applePrice, msPrice)
+            .thenAccept((i) -> log.info("stock price of apple or ms={}", i));
+        future.get();
     }
 }
